@@ -68,6 +68,46 @@ export OPENAI_MODEL=llama3.1:8b
 claudex
 ```
 
+### FreeLLMAPI — OpenAI-compatible gateway
+
+Start FreeLLMAPI and copy its API token and exact model ID from its dashboard.
+Then set the OpenAI-compatible provider variables before launching Claudex:
+
+```powershell
+$env:CLAUDE_CODE_USE_OPENAI = "1"
+if (-not $env:OPENAI_BASE_URL) { $env:OPENAI_BASE_URL = "http://127.0.0.1:8000/v1" }
+$env:OPENAI_API_KEY = "<FreeLLMAPI API token>"
+$env:OPENAI_MODEL = "<model ID from the FreeLLMAPI dashboard>"
+claudex
+```
+
+Replace the token and model placeholders with the values from your dashboard.
+Set `OPENAI_BASE_URL` to the gateway's actual address if it is not listening at
+`127.0.0.1:8000`; do not include a guessed model name.
+
+### Optional: REA MCP server
+
+Claudex supports stdio MCP servers through the project `.mcp.json` file. To
+enable the installed REA MCP server, add this entry to `.mcp.json` (create the
+file with the surrounding `mcpServers` object if needed):
+
+```json
+{
+  "mcpServers": {
+    "rea": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "rea-agents@6.7.0", "mcp"]
+    }
+  }
+}
+```
+
+This is opt-in: Claudex prompts you to approve new project-scoped MCP servers
+before connecting; after approval, REA starts when Claudex loads the
+configuration. Use its tools only on artifacts and targets you are authorized
+to analyze.
+
 ---
 
 ## Guides
